@@ -189,13 +189,14 @@ export function ldLocalBusiness(areaNames = null) {
   };
 }
 
-export function ldService(regionName = '') {
+export function ldService(regionName = '', images = []) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Service',
     serviceType: '옥상 무동력 벤츄레이터 교체·신규 설치',
     provider: { '@id': `${site.domain}/#business` },
     ...(regionName ? { areaServed: { '@type': 'AdministrativeArea', name: regionName } } : {}),
+    ...(images.length ? { image: images } : {}),
     availableChannel: {
       '@type': 'ServiceChannel',
       servicePhone: { '@type': 'ContactPoint', telephone: site.tel, contactType: '상담' },
