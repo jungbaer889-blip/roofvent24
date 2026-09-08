@@ -125,8 +125,8 @@ write('', layout({
   body: `
 <section class="hero"><div class="wrap">
   <div class="eyebrow">${site.areaLabel}</div>
-  <h1>옥상 환풍기,<br>녹슬어 주저앉기 전에 바꿉니다</h1>
-  <p class="sub">무동력 벤츄레이터 교체와 신규 설치를 합니다. 상부만 갈면 되는지 좌대까지 손봐야 하는지, 사진 한 장이면 먼저 알려드립니다. 전기 배선 없이 바람으로 돌기 때문에 달아두면 전기요금이 들지 않습니다.</p>
+  <h1>옥상 환풍기가 멈췄나요?<br>비가 오면 물이 새거나, 환기가 답답한가요?</h1>
+  <p class="sub">녹슬고 멈춰버린 벤츄레이터, 제대로 진단하고 새 제품으로 깔끔하게 교체합니다.</p>
   <ul class="facts">
     <li>교체 · 신규 설치</li>
     <li>좌대 교체 병행</li>
