@@ -143,6 +143,8 @@ write('', layout({
   </div>
 </div></section>
 
+${caseSection('시공 사례', pickCases(4), `보정하지 않은 실제 현장 사진입니다. 왼쪽이 시공 전, 오른쪽이 시공 후입니다. <a href="/cases/" style="color:var(--cta);font-weight:700">사례 전체 보기 →</a>`)}
+
 <section><div class="wrap">
   <div class="sec-label">SERVICE</div>
   <h2 class="sec">이런 작업을 합니다</h2>
@@ -164,8 +166,6 @@ write('', layout({
     <div class="card"><span class="no">04</span><h4>수도권 직접 방문</h4><p>서울·인천·경기 전 지역을 직접 다닙니다. 옥상 접근 경로도 미리 확인합니다.</p></div>
   </div>
 </div></section>
-
-${caseSection('시공 사례', pickCases(4), `보정하지 않은 실제 현장 사진입니다. 왼쪽이 시공 전, 오른쪽이 시공 후입니다. <a href="/cases/" style="color:var(--cta);font-weight:700">사례 전체 보기 →</a>`)}
 
 <section><div class="wrap">
   <div class="sec-label">CHECK</div>
