@@ -88,6 +88,24 @@ section.hero{
   border:1px solid rgba(255,255,255,.18);padding:6px 12px;border-radius:8px}
 @media(max-width:700px){.hero{padding:44px 0 42px}.hero h1{font-size:29px}.hero .sub{font-size:16px}}
 
+/* ── 메인 히어로 영상 배경 ──────────────── */
+section.hero-film{padding:88px 0 82px;background:#0b2334}
+.hero-media{position:absolute;inset:0;z-index:0;overflow:hidden;background:#0b2334}
+.hero-media video{width:100%;height:100%;object-fit:cover;display:block}
+.hero-media::after{content:'';position:absolute;inset:0;
+  background:linear-gradient(100deg,rgba(7,25,38,.90) 0%,rgba(9,32,49,.80) 42%,rgba(9,32,49,.58) 100%)}
+.hero-film::after{z-index:1}
+.hero-film .wrap{position:relative;z-index:2}
+@media(max-width:700px){
+  section.hero-film{padding:56px 0 50px}
+  .hero-media::after{background:linear-gradient(170deg,rgba(7,25,38,.90) 0%,rgba(9,32,49,.86) 55%,rgba(9,32,49,.82) 100%)}
+}
+/* 움직임 최소화를 켠 사용자에게는 정지 이미지만 */
+@media(prefers-reduced-motion:reduce){
+  .hero-media video{display:none}
+  .hero-media{background:#0b2334 url(/video/hero-poster.jpg) center/cover no-repeat}
+}
+
 /* ── 버튼 ───────────────────────────────── */
 .btns{display:flex;flex-wrap:wrap;gap:10px}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;
