@@ -3,7 +3,7 @@ import path from 'path';
 import { site } from './site.config.mjs';
 import { guides } from './src/data/guides.mjs';
 import { regions } from './src/data/regions.mjs';
-import { cases, pickCases, pickCasesForRegion } from './src/data/cases.mjs';
+import { cases, pickCases, pickCasesForRegion, ownCases } from './src/data/cases.mjs';
 import {
   layout, ctaBand, faqBlock, regionChips, guideCards, breadcrumb, specTable,
   ldLocalBusiness, ldService, ldFAQ, ldBreadcrumb, ldArticle,
@@ -30,28 +30,41 @@ function copyDir(from, to) {
 
 /* ── 재사용 블록 ───────────────────────────── */
 
-function caseCard(c, eager = false) {
+// 사진 alt — 지역명 + 핵심 검색어를 넣어 이미지 검색에도 걸리게 합니다.
+function caseAlt(c, when) {
+  return [c.place, '옥상 환풍기', c.size, `벤츄레이터 ${c.type}`, when]
+    .filter(Boolean).join(' ');
+}
+
+// currentSlug: 지금 보고 있는 지역. 그 지역 사례는 자기 페이지로 다시 링크하지 않습니다.
+function caseCard(c, eager = false, currentSlug = '') {
   const load = eager ? '' : ' loading="lazy"';
-  return `<article class="case">
+  const linked = c.region && c.region !== currentSlug;
+  const region = linked ? regions.find((r) => r.slug === c.region) : null;
+  const tag = linked ? 'a' : 'article';
+  const attrs = linked
+    ? ` class="case case-link" href="/vent/regions/${c.region}/"` : ' class="case"';
+  return `<${tag}${attrs}>
     <div class="case-imgs">
-      <figure><img src="${c.before}" alt="시공 전 — ${c.place ? c.place + ' ' : ''}${c.title}" width="1100" height="1100"${load} decoding="async"><figcaption class="tag-b">시공 전</figcaption></figure>
-      <figure><img src="${c.after}" alt="시공 후 — ${c.place ? c.place + ' ' : ''}${c.title}" width="1100" height="1100"${load} decoding="async"><figcaption class="tag-a">시공 후</figcaption></figure>
+      <figure><img src="${c.before}" alt="${caseAlt(c, '시공 전')}" width="1100" height="1100"${load} decoding="async"><figcaption class="tag-b">시공 전</figcaption></figure>
+      <figure><img src="${c.after}" alt="${caseAlt(c, '시공 후')}" width="1100" height="1100"${load} decoding="async"><figcaption class="tag-a">시공 후</figcaption></figure>
     </div>
     <div class="case-head">
       <span class="type">${c.type}</span>${c.place ? `<span class="place">${c.place}</span>` : ''}${c.size ? `<span class="cspec">${c.size}</span>` : ''}
       <h3>${c.title}</h3>
       <p>${c.desc}</p>
+      ${region ? `<span class="more">${region.name} 옥상 환풍기 안내 보기 →</span>` : ''}
     </div>
-  </article>`;
+  </${tag}>`;
 }
 
-function caseSection(heading, list, lead) {
+function caseSection(heading, list, lead, currentSlug = '', label = 'CASE') {
   if (!list.length) return '';
   return `<section id="cases"><div class="wrap">
-  <div class="sec-label">CASE</div>
+  <div class="sec-label">${label}</div>
   <h2 class="sec">${heading}</h2>
   <p class="sec-lead">${lead}</p>
-  <div class="cases">${list.map((c, i) => caseCard(c, i < 2)).join('')}</div>
+  <div class="cases${list.length === 1 ? ' cases-solo' : ''}">${list.map((c, i) => caseCard(c, i < 2, currentSlug)).join('')}</div>
 </div></section>`;
 }
 
@@ -327,12 +340,35 @@ ${ctaBand('글로 다 설명되지 않는 부분이 있습니다', '옥상 사�
 regions.forEach((r, ri) => {
   const full = r.city === '서울' || r.city === '인천' ? `${r.city} ${r.name}`.replace(/^(서울|인천) (서울|인천) /, '$1 ') : r.name;
   const trail = [{ label: '홈', href: '/' }, { label: '옥상 환풍기 교체·설치', href: '/vent/' }, { label: r.name }];
-  const list = pickCasesForRegion(r.slug, 2, ri * 2);
+
+  const own = ownCases(r.slug);                       // 이 지역에서 실제로 한 작업
+  const near = pickCasesForRegion(r.slug, 2, ri * 2); // 없으면 인근 지역 사례로 채움
+
+  // 이 지역 사례가 있으면 사진을 본문보다 위에 올리고, 공유·검색 대표 이미지도 그 사진으로 씁니다.
+  const topCases = own.length
+    ? caseSection(`${full} 옥상 환풍기 교체 시공 사례`, own,
+      `${full}에서 실제로 작업한 현장입니다. 보정하지 않은 사진이고 왼쪽이 시공 전, 오른쪽이 시공 후입니다.`,
+      r.slug)
+    : '';
+  const bottomCases = own.length
+    ? ''
+    : caseSection('수도권 시공 사례', near,
+      `아직 ${r.name} 현장 사진이 올라가 있지 않아 인근 지역 작업을 먼저 보여드립니다. 왼쪽이 시공 전, 오른쪽이 시공 후입니다. <a href="/cases/" style="color:var(--cta);font-weight:700">사례 전체 보기 →</a>`,
+      r.slug);
+
+  const ogImage = own.length ? own[0].after : '/img/og-default.jpg';
+
   write(`vent/regions/${r.slug}`, layout({
     title: r.title,
     description: r.description,
     path: `/vent/regions/${r.slug}/`,
-    jsonld: [ldLocalBusiness([full]), ldService(full), ldFAQ(r.faq), ldBreadcrumb(trail)],
+    ogImage,
+    jsonld: [
+      ldLocalBusiness([full]),
+      ldService(full, own.map((c) => site.domain + c.after)),
+      ldFAQ(r.faq),
+      ldBreadcrumb(trail),
+    ],
     body: `
 ${breadcrumb(trail)}
 <section class="hero"><div class="wrap">
@@ -350,11 +386,13 @@ ${breadcrumb(trail)}
   </div>
 </div></section>
 
+${topCases}
+
 <section><div class="wrap"><div class="prose">
   ${r.sections.map((s) => `<h3>${s.h2}</h3>${s.html}`).join('\n')}
 </div></div></section>
 
-${caseSection(`${r.name} 인근 시공 사례`, list, `보정하지 않은 실제 현장 사진입니다. 왼쪽이 시공 전, 오른쪽이 시공 후입니다. <a href="/cases/" style="color:var(--cta);font-weight:700">사례 전체 보기 →</a>`)}
+${bottomCases}
 ${SPEC_STRIP}
 ${faqBlock(r.faq, `${r.name} 지역 자주 묻는 질문`)}
 ${guideSection('', `${r.name} 작업 전에 알아두면 좋은 것들`, 3)}
