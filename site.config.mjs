@@ -7,7 +7,7 @@ export const site = {
   name: '루프벤트',
   nameSpaced: '루프 벤트',
   domain: 'https://roofvent24.com',
-  tagline: '옥상 무동력 벤츄레이터 교체·설치 전문',
+  tagline: '옥상 환풍기 벤츄레이터 교체·설치 전문',
 
   tel: '010-8820-1848',
   telHref: '01088201848',
