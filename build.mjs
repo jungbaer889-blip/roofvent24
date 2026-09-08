@@ -123,7 +123,11 @@ write('', layout({
   path: '/',
   jsonld: [ldLocalBusiness(), ldService(), ldFAQ(homeFaq)],
   body: `
-<section class="hero"><div class="wrap">
+<section class="hero hero-film">
+  <div class="hero-media" aria-hidden="true">
+    <video src="/video/hero.mp4" poster="/video/hero-poster.jpg" autoplay muted loop playsinline preload="metadata"></video>
+  </div>
+  <div class="wrap">
   <div class="eyebrow">${site.areaLabel}</div>
   <h1>옥상 환풍기가 멈췄나요?<br>비가 오면 물이 새거나, 환기가 답답한가요?</h1>
   <p class="sub">녹슬고 멈춰버린 벤츄레이터, 제대로 진단하고 새 제품으로 깔끔하게 교체합니다.</p>
