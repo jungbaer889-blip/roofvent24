@@ -19,7 +19,7 @@ export const site = {
   bizNo: '613-24-75230',                    // 사업자등록번호
 
   // ★ TODO — 서치어드바이저/서치콘솔에서 발급받은 코드를 넣으세요.
-  naverVerification: '',
+  naverVerification: '14837eee2cd90d4209da5e4d9f36611d49fc7892',
   googleVerification: '',
 
   areaLabel: '서울 · 인천 · 경기 수도권 전 지역',
