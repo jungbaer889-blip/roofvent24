@@ -342,7 +342,7 @@ regions.forEach((r, ri) => {
   const trail = [{ label: '홈', href: '/' }, { label: '옥상 환풍기 교체·설치', href: '/vent/' }, { label: r.name }];
 
   const own = ownCases(r.slug);                       // 이 지역에서 실제로 한 작업
-  const near = pickCasesForRegion(r.slug, 2, ri * 2); // 없으면 인근 지역 사례로 채움
+  const near = pickCasesForRegion(r.slug, 4, ri * 2); // 없으면 수도권 사례로 채움
 
   // 이 지역 사례가 있으면 사진을 본문보다 위에 올리고, 공유·검색 대표 이미지도 그 사진으로 씁니다.
   const topCases = own.length
@@ -353,7 +353,7 @@ regions.forEach((r, ri) => {
   const bottomCases = own.length
     ? ''
     : caseSection('수도권 시공 사례', near,
-      `아직 ${r.name} 현장 사진이 올라가 있지 않아 인근 지역 작업을 먼저 보여드립니다. 왼쪽이 시공 전, 오른쪽이 시공 후입니다. <a href="/cases/" style="color:var(--cta);font-weight:700">사례 전체 보기 →</a>`,
+      `저희가 수도권에서 작업한 현장입니다. 사진마다 실제 시공한 지역을 적어 두었습니다. 왼쪽이 시공 전, 오른쪽이 시공 후입니다. <a href="/cases/" style="color:var(--cta);font-weight:700">사례 전체 보기 →</a>`,
       r.slug);
 
   const ogImage = own.length ? own[0].after : '/img/og-default.jpg';
