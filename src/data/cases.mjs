@@ -9,22 +9,32 @@
 //    2) 아래 배열에 c(...) 한 줄을 추가합니다.
 //    3) npm run build  →  메인·허브·사례·지역 페이지에 자동으로 붙습니다.
 //
+// ▶ 지역 페이지의 카톡·검색 썸네일(og:image)은 그 지역 사례의 '시공 후' 사진이 자동으로 쓰입니다.
+//
 // ▶ c( 번호, 작업유형, 제목, 설명, 표시지역명, 지역slug, 규격 )
-//    region slug 를 채우면 그 지역 페이지에서 맨 앞에 노출됩니다.
+//    region slug 를 채우면 그 지역 페이지 맨 위에 이 사례가 올라갑니다.
 //    (지역 slug 는 src/data/regions-*.json 의 slug 값과 같아야 합니다)
 
-const c = (n, type, title, desc, place = '', region = '', size = '') => ({
-  id: `case${String(n).padStart(2, '0')}`,
-  type, title, desc, place, region, size,
-  before: `/img/cases/case${String(n).padStart(2, '0')}-before.webp`,
-  after: `/img/cases/case${String(n).padStart(2, '0')}-after.webp`,
-});
+const c = (n, type, title, desc, place = '', region = '', size = '') => {
+  const nn = String(n).padStart(2, '0');
+  return {
+    id: `case${nn}`,
+    type, title, desc, place, region, size,
+    before: `/img/cases/case${nn}-before.webp`,
+    after: `/img/cases/case${nn}-after.webp`,
+  };
+};
 
 export const cases = [
   c(1, '교체', '녹슬어 주저앉은 후드와 좌대 일괄 교체',
     '상부 후드가 부식으로 찢어져 내려앉고 녹물이 좌대를 타고 흘러내린 상태였습니다. 후드와 좌대를 함께 걷어내고 300파이 벤츄레이터로 새로 앉혔습니다.',
     '서울 강서구 화곡동', 'gangseo', '300파이'),
 ];
+
+// 특정 지역의 자체 시공 사례만 (없으면 빈 배열)
+export function ownCases(slug) {
+  return cases.filter((x) => x.region === slug);
+}
 
 // 페이지마다 다른 사례가 나오도록 고르는 함수
 export function pickCases(count, offset = 0) {
