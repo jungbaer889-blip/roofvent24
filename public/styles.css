@@ -126,8 +126,12 @@ section:nth-of-type(even) .card{background:var(--bg)}
 
 /* ── 시공 사례 ──────────────────────────── */
 .cases{display:grid;gap:22px;grid-template-columns:repeat(2,1fr)}
+.cases.cases-solo{grid-template-columns:minmax(0,780px)}
 @media(max-width:800px){.cases{grid-template-columns:1fr}}
-.case{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.case{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:block}
+a.case-link{text-decoration:none;color:inherit;transition:.15s}
+a.case-link:hover{border-color:var(--brand-2);transform:translateY(-2px);box-shadow:var(--shadow)}
+a.case-link:hover .case-head h3{color:var(--brand-2)}
 section:nth-of-type(even) .case{background:var(--bg)}
 .case-imgs{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--line)}
 .case-imgs figure{margin:0;position:relative;background:#e9edf1}
